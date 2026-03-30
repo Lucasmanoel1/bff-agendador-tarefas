@@ -44,7 +44,7 @@ public class TarefasController {
     public ResponseEntity<List<TarefasDTOResponse>> buscaListaTarefasEventos(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicial,
                                                                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal,
                                                                              @RequestHeader(name = "Authorization", required = false) String token){
-        return ResponseEntity.ok(tarefasService.buscaListaTarefasEventos(dataInicial, dataFinal, token));
+        return ResponseEntity.ok(tarefasService.buscaListaTarefasAgendadasPorPeriodo(dataInicial, dataFinal, token));
     }
     @GetMapping
     @Operation(summary = "Listar tarefas do usuário",description = "Retorna todas as tarefas associadas ao usuário")

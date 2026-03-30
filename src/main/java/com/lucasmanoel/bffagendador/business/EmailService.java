@@ -1,4 +1,4 @@
-package com.lucasmanoel.bffagendador;
+package com.lucasmanoel.bffagendador.business;
 
 
 import com.lucasmanoel.bffagendador.business.dto.out.TarefasDTOResponse;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class NotificacaoService {
+public class EmailService {
 
     private final EmailClient client;
 
