@@ -30,8 +30,9 @@ public class TarefasController {
     @PostMapping
     @Operation(summary = "Criar tarefa",description = "Cria uma nova tarefa para o usuário com status inicial pendente")
     @ApiResponse(responseCode = "200", description = "Tarefa criada com sucesso")
-    @ApiResponse(responseCode = "400", description = "Dados inválidos para criação da tarefa")
+    @ApiResponse(responseCode = "403", description = "Dados inválidos para criação da tarefa")
     @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     public ResponseEntity<TarefasDTOResponse> gravarTarefas(@RequestBody TarefasDTORequest dto,
                                                             @RequestHeader(name = "Authorization", required = false) String token){
         return ResponseEntity.ok(tarefasService.gravaTarefa(token, dto));
@@ -39,17 +40,19 @@ public class TarefasController {
     @GetMapping("/eventos")
     @Operation(summary = "Listar tarefas por período",description = "Retorna as tarefas do usuário dentro de um intervalo de datas informado")
     @ApiResponse(responseCode = "200", description = "Lista de tarefas retornada com sucesso")
-    @ApiResponse(responseCode = "400", description = "Parâmetros de data inválidos")
+    @ApiResponse(responseCode = "403", description = "Parâmetros de data inválidos")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     public ResponseEntity<List<TarefasDTOResponse>> buscaListaTarefasEventos(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicial,
                                                                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal,
                                                                              @RequestHeader(name = "Authorization", required = false) String token){
-        return ResponseEntity.ok(tarefasService.buscaListaTarefasEventos(dataInicial, dataFinal, token));
+        return ResponseEntity.ok(tarefasService.buscaListaTarefasAgendadasPorPeriodo(dataInicial, dataFinal, token));
     }
     @GetMapping
     @Operation(summary = "Listar tarefas do usuário",description = "Retorna todas as tarefas associadas ao usuário")
     @ApiResponse(responseCode = "200", description = "Lista de tarefas retornada com sucesso")
-    @ApiResponse(responseCode = "400", description = "Token inválido ou não informado")
+    @ApiResponse(responseCode = "403", description = "Email não encontrado")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     public ResponseEntity<List<TarefasDTOResponse>> buscaListaTarefasEmail(@RequestHeader(name = "Authorization", required = false) String token){
         return ResponseEntity.ok(tarefasService.busaListaTarefasEmail(token));
@@ -58,7 +61,8 @@ public class TarefasController {
     @DeleteMapping
     @Operation(summary = "Deletar tarefa",description = "Remove uma tarefa com base no ID informado")
     @ApiResponse(responseCode = "204", description = "Tarefa deletada com sucesso")
-    @ApiResponse(responseCode = "400", description = "ID inválido")
+    @ApiResponse(responseCode = "403", description = "ID inválido")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     public ResponseEntity<Void> deletaTarefaId(@RequestParam String id,
                                                @RequestHeader(name = "Authorization", required = false) String token){
@@ -68,7 +72,8 @@ public class TarefasController {
     @PatchMapping
     @Operation(summary = "Atualizar status da tarefa",description = "Altera o status de uma tarefa existente")
     @ApiResponse(responseCode = "200", description = "Status da tarefa atualizado com sucesso")
-    @ApiResponse(responseCode = "400", description = "Parâmetros inválidos para atualização de status")
+    @ApiResponse(responseCode = "403", description = "ID inválido")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
     public  ResponseEntity<TarefasDTOResponse> alteraStatusTarefa(@RequestParam StatusNotificacaoEnum status,
                                                                   @RequestParam String id,
@@ -80,6 +85,7 @@ public class TarefasController {
     @ApiResponse(responseCode = "200", description = "Tarefa atualizada com sucesso")
     @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização da tarefa")
     @ApiResponse(responseCode = "500", description = "Erro interno no servidor")
+    @ApiResponse(responseCode = "401", description = "Usuário não autorizado")
     public ResponseEntity<TarefasDTOResponse> updateTarefas(@RequestBody TarefasDTORequest dto,
                                                             @RequestParam String id,
                                                             @RequestHeader(name = "Authorization", required = false) String token){
